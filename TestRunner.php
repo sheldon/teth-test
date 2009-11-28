@@ -39,8 +39,10 @@ class TestRunner{
     $this->tests_passed = 0;
     $this->tests_failed = 0;
     foreach($this->tests as $class => $tests){
-      $ret .= "\nRunning Tests For $class...\n";
+      $ret .= "\nRunning Tests in $class...\n";
       $test_class = new $class;
+      if($test_class->class_path) include_once($test_class->class_path);
+      if($test_class->class) $test_class->class = new $test_class->class;
       foreach($tests as $test){
         $ret .= "  Running $test ... ";
         if($test_class->$test()){

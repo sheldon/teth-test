@@ -1,9 +1,8 @@
 <?php
 class TestAutoloader extends BaseTest{
-  public function __construct(){
-    include("../../teth/Autoloader.php");
-    $this->class = new Autoloader();
-  }
+  public $class = "AutoLoader";
+  public $class_path = "../../teth/Autoloader.php";
+  
   public function path_to(){
     print_r(Autoloader::path_to('autoloader')); exit;
   }
