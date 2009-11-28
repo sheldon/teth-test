@@ -6,6 +6,16 @@ class TestAutoloader extends BaseTest{
   public function path_to(){
     $ret = true;
     
+    //wrong syntax usage
+    unset(Config::$settings['classes']['foo_index']);
+    if(Autoloader::path_to('foo_index') != "FRAMEWORK_DIR.php") $ret = false;
+    
+    Config::$settings['classes']['foo_index'] = array();
+    if(Autoloader::path_to('foo_index') != "FRAMEWORK_DIR.php") $ret = false;
+    
+    Config::$settings['classes']['foo_index'] = "foo_wrong_syntax_to_config";
+    if(Autoloader::path_to('foo_index') != "ff/f/ff") $ret = false;
+    
     //normal syntax usage
     Config::$settings['classes']['foo_index'] = array('class'=>'FooClass');
     if(Autoloader::path_to('foo_index') != "FRAMEWORK_DIRFooClass.php") $ret = false;
