@@ -1,5 +1,5 @@
 <?
-class CoreRouter extends BaseTest{
+class TestCoreRouter extends BaseTest{
   public function construct(){}
   public function map(){}
   public function shift(){}
