@@ -1,61 +1,70 @@
+#!/usr/bin/php
+
 <?php
 class TestRunner{
+  public $bootstrap_paths = array("BaseTest.php","tests/TestAutoloader.php");
   public $scan_folders = array();
-  public $test_files = array();
-  public $tests = array();
-  public $tests_passed = 0;
-  public $tests_failed = 0;
+  public $test_classes = array();
 
-  function __construct($scan_folders = array()){
-    include("BaseTest.php");
-  }
-  
-  public function scan(){
-    $this->include_files();
-    $this->scan_methods();
-  }
-  
-  public function include_files(){
-    foreach($this->scan_folders as $folder){
-      $dirs = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folder), true);
-      foreach($dirs as $dir){
-        $this->test_files[] = $dir->getPathname();
-        include($dir->getPathname());
-      }
+  public function __construct($run_from_commandline = false){
+    if($run_from_commandline){
+      $this->init_constants();
+      echo "Bootstrapping Testing System by Testing Autoloader...\n";
+      $bootstrap_test = $this->bootstrap_test_autoloader();
+      echo $bootstrap_test->output;
+      if($bootstrap_test->tests_failed){
+        echo "Bootstrap Fail, stopping subsequent tests.\n";
+        exit;
+      }else echo "Bootstrap Pass, continuing...\n";
+      Autoloader::init();
+      Autoloader::add_component(SITE_NAME, SITE_DIR);  
+      Autoloader::register_classes(array(SITE_DIR));
+      $this->test_classes = $this->scan_classes(Autoloader::$classes);
+      print_r($this->test_classes);
     }
   }
   
-  public function scan_methods(){
-    foreach(get_declared_classes() as $class) {
-      if(is_subclass_of($class, "BaseTest")) {
-        foreach(get_class_methods($class) as $method){
-          $this->tests[$class][] = $method;
-        }
-      }
+  public function init_constants(){
+    //stolen from index.php in our skel :)
+    define("SITE_DIR", realpath(dirname(__FILE__)."/../../")."/");
+    $path = pathinfo(SITE_DIR);
+    define("SITE_NAME", $path['basename']);
+    define("FRAMEWORK_NAME", "teth");
+
+    if(!defined("FRAMEWORK_DIR")) define("FRAMEWORK_DIR", SITE_DIR.FRAMEWORK_NAME."/");
+    if(!defined("APP_DIR")) define('APP_DIR', SITE_DIR . "app/");
+    if(!defined("CONTROLLER_DIR")) define('CONTROLLER_DIR', APP_DIR.'controller/');
+    if(!defined("CONFIG_DIR")) define('CONFIG_DIR' , APP_DIR.'config/');
+    if(!defined("PUBLIC_DIR")) define('PUBLIC_DIR' , SITE_DIR.'public/');
+
+    if(function_exists('date_default_timezone_set')){
+      if(!defined('PHP_TIMEZONE')) date_default_timezone_set('Europe/London');
+      else date_default_timezone_set(PHP_TIMEZONE);
     }
+  }
+  
+  public function bootstrap_test_autoloader(){
+    foreach($this->bootstrap_paths as $path) include_once($path);
+    $test_autoloader = new TestAutoloader();
+    return $test_autoloader->run_tests();
+  }
+  
+  public function scan_classes($all_classes){
+    $test_classes = array();
+    foreach((array)$all_classes as $class) if(is_subclass_of($class, "BaseTest")) $test_classes[] = $class;
+    return $test_classes;
   }
   
   public function run_tests(){
     $this->tests_passed = 0;
     $this->tests_failed = 0;
-    foreach($this->tests as $class => $tests){
+    foreach($this->tests as $class){
       $ret .= "\nRunning Tests in $class...\n";
-      $test_class = new $class;
-      if($test_class->class_path) include_once($test_class->class_path);
-      if($test_class->class) $test_class->class = new $test_class->class;
-      foreach($tests as $test){
-        $ret .= "  Running $test ... ";
-        if($test_class->$test()){
-          $this->tests_passed++;
-          $ret .= "pass\n";
-        }else{
-          $this->tests_failed++;
-          $ret .= "fail\n";
-        }
-      }
+      
     }
-    $ret .= "\n\nTests Passed: $this->tests_passed\nTests Failed: $this->tests_failed\n\n";
+    //$ret .= "\n\nTests Passed: $this->tests_passed\nTests Failed: $this->tests_failed\n\n";
     return $ret;
   }
 }
+if(!$_SERVER['HTTP_HOST']) new TestRunner(true);
 ?>
