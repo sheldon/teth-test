@@ -54,7 +54,7 @@ class TestRunner{
   
   public function scan_classes($all_classes){
     $test_classes = array();
-    foreach((array)$all_classes as $class) if(is_subclass_of($class, "BaseTest")) $test_classes[] = $class;
+    foreach((array)$all_classes as $class=>$path) if(is_subclass_of($class, "BaseTest")) $test_classes[] = $class;
     return $test_classes;
   }
   
