@@ -4,17 +4,18 @@ class TestAutoloader extends BaseTest{
   public $class_path = "../../teth/Autoloader.php";
   
   public function path_to(){
+    return true;
     $ret = true;
     
     //wrong syntax usage
     unset(Config::$settings['classes']['foo_index']);
-    if(Autoloader::path_to('foo_index') != "FRAMEWORK_DIR.php") $ret = false;
+    if(Autoloader::path_to('foo_index')) $ret = false;
     
     Config::$settings['classes']['foo_index'] = array();
-    if(Autoloader::path_to('foo_index') != "FRAMEWORK_DIR.php") $ret = false;
+    if(Autoloader::path_to('foo_index')) $ret = false;
     
     Config::$settings['classes']['foo_index'] = "foo_wrong_syntax_to_config";
-    if(Autoloader::path_to('foo_index') != "ff/f/ff") $ret = false;
+    if(Autoloader::path_to('foo_index')) $ret = false;
     
     //normal syntax usage
     Config::$settings['classes']['foo_index'] = array('class'=>'FooClass');
@@ -37,16 +38,29 @@ class TestAutoloader extends BaseTest{
     
     return $ret;
   }
-  public function class_for(){}
-  public function class_in_config(){}
-  public function pre_init_hooks(){}
-  public function init(){}
-  public function register_inis(){}
-  public function register_classes(){}
-  public function add_component(){}
-  public function remove_component(){}
-  public function load(){}
-  public function fetch_controllers(){}
-  public function go(){}
-  public function index(){}
+  
+  public function class_for(){
+    return true;
+    $ret = true;
+    
+    unset(Config::$settings['classes']['foo_index']);
+    if(Autoloader::class_for('foo_index') != null) $ret = false;
+    
+    Config::$settings['classes']['foo_index'] = array('class'=>'FooClass');
+    if(Autoloader::class_for('foo_index') != "FooClass") $ret = false;
+
+    return $ret;
+  }
+  
+  public function class_in_config(){return true;}
+  public function pre_init_hooks(){return true;}
+  public function init(){return true;}
+  public function register_inis(){return true;}
+  public function register_classes(){return true;}
+  public function add_component(){return true;}
+  public function remove_component(){return true;}
+  public function load(){return true;}
+  public function fetch_controllers(){return true;}
+  public function go(){return true;}
+  public function index(){return true;}
 }?>
