@@ -16,8 +16,11 @@ class TestRunner{
         echo "Bootstrap Fail, stopping subsequent tests.\n";
         exit;
       }else echo "Bootstrap Pass, continuing...\n";
+      echo "Running Autoloader::init()\n";
       Autoloader::init();
+      echo "Running Autoloader::add_component()\n";      
       Autoloader::add_component(SITE_NAME, SITE_DIR);  
+      echo "Running Autoloader::register_classes()\n";      
       Autoloader::register_classes(array(SITE_DIR));
       $this->test_classes = $this->scan_classes(Autoloader::$classes);
       print_r($this->test_classes);
