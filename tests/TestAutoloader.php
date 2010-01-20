@@ -80,6 +80,33 @@ class TestAutoloader extends BaseTest{
     return $ret;
   }
   public function pre_init_hooks(){return true;}
+  /**
+   * Have to use globals in order to test that a hook function is called,
+   * as cmd dont have sessions
+   */
+  public function pre_init_hooks(){
+    $GLOBALS['pre_init_hooks_test_value'] = false;
+    $ret = true;
+    unset(Config::$settings['pre_functions']);
+    Autoloader::pre_init_hooks();
+    if($GLOBALS['pre_init_hooks_test_value'] !== false) $this->results['pre_init_hooks']['empty_config'] = $ret = false;
+    else $this->results['pre_init_hooks']['empty_config'] = true;
+
+    Config::$settings['pre_functions'] = array('file/that/doesnt/exists'=>array('TestAutoloader'=>array('pre_init_hook_test')));
+    Autoloader::pre_init_hooks();
+    if($GLOBALS['pre_init_hooks_test_value'] !== false) $this->results['pre_init_hooks']['incorrect_file_path'] = $ret = false;
+    else $this->results['pre_init_hooks']['incorrect_file_path'] = true;
+
+    $path = __FILE__;
+    Config::$settings['pre_functions'] = array($path=>array('TestAutoloader'=>array('pre_init_hook_test')));
+    Autoloader::pre_init_hooks();
+    if($GLOBALS['pre_init_hooks_test_value'] !== true) $this->results['pre_init_hooks']['not_called_properly'] = $ret = false;
+    else $this->results['pre_init_hooks']['not_called_properly'] = true;
+
+
+    unset(Config::$settings['pre_functions']);
+    return $ret;
+  }
   public function init(){return true;}
   public function register_inis(){return true;}
   public function register_classes(){return true;}
