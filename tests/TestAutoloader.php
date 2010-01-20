@@ -44,6 +44,8 @@ class TestAutoloader extends BaseTest{
     if(Autoloader::path_to('foo_index') != "/a/file/path/instead/of/a/constant/FooComponent/FooModule/FooClass.php") $this->results['path_to']['foo_class_foo_module_foo_component_test_full_path'] = $ret = false;
     else $this->results['path_to']['foo_class_foo_module_foo_component_test_full_path'] = true;
     
+    unset(Config::$settings['classes']['foo_index']);
+    
     return $ret;
   }
   
@@ -57,6 +59,8 @@ class TestAutoloader extends BaseTest{
     Config::$settings['classes']['foo_index'] = array('class'=>'FooClass');
     if(Autoloader::class_for('foo_index') != "FooClass") $this->results['class_for']['foo_class'] = $ret = false;
     else $this->results['class_for']['foo_class'] = true;
+
+    unset(Config::$settings['classes']['foo_index']);
 
     return $ret;
   }
