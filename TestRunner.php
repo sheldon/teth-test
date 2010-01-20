@@ -5,15 +5,18 @@ class TestRunner{
   public $bootstrap_paths = array("BaseTest.php","tests/TestAutoloader.php");
   public $scan_folders = array();
   public $test_classes = array();
+  public $failed = 0;
+  public $passed = 0;
 
   public function __construct($run_from_commandline = false){
     if($run_from_commandline){
       $this->init_constants();
       echo "Bootstrapping Testing System by Testing Autoloader...\n";
       $bootstrap_test = $this->bootstrap_test_autoloader();
-      echo $bootstrap_test->output;
       if($bootstrap_test->tests_failed){
         echo "Bootstrap Fail, stopping subsequent tests.\n";
+        echo "=== DEBUG ===\n";
+        echo $bootstrap_test->output;
         exit;
       }else echo "Bootstrap Pass, continuing...\n";
       echo "Running Autoloader::init()\n";
@@ -23,7 +26,8 @@ class TestRunner{
       echo "Running Autoloader::register_classes()\n";      
       Autoloader::register_classes(array(SITE_DIR));
       $this->test_classes = $this->scan_classes(Autoloader::$classes);
-      print_r($this->test_classes);
+      echo "Found ".count($this->test_classes)." test classes ...\n";
+      $this->run_tests();
     }
   }
   
@@ -59,11 +63,17 @@ class TestRunner{
   }
   
   public function run_tests(){
-    $this->tests_passed = 0;
-    $this->tests_failed = 0;
-    foreach($this->tests as $class){
-      $ret .= "\nRunning Tests in $class...\n";
-      
+    $start_time = time();
+    echo "==== STARTING ====\n";
+    $this->failed = 0;
+    $this->passed = 0;
+    $this->total = 0;
+    foreach($this->test_classes as $class){
+      echo "--> $class";
+      $obj = new $class;
+      $ran = $obj->run_tests();
+      if($ran->tests_failed) echo "\n".$ran->output;
+      else  echo " = ALL OK\n";
     }
     //$ret .= "\n\nTests Passed: $this->tests_passed\nTests Failed: $this->tests_failed\n\n";
     return $ret;
