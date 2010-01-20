@@ -2,8 +2,9 @@
 class TestAutoloader extends BaseTest{
   public $class = "AutoLoader";
   public $class_path = "../../teth/Autoloader.php";
-  public $results = array();
-  
+  public $excluded_functions = array("run_tests", "pre_init_hook_test");
+
+
   public function path_to(){
     $ret=true;
     //wrong syntax usage
