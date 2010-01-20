@@ -83,7 +83,7 @@ class TestAutoloader extends BaseTest{
 
   /**
    * Have to use globals in order to test that a hook function is called,
-   * as cmd dont have sessions
+   * as cmd lines don't have sessions
    */
   public function pre_init_hooks(){
     $GLOBALS['pre_init_hooks_test_value'] = false;
@@ -104,10 +104,10 @@ class TestAutoloader extends BaseTest{
     if($GLOBALS['pre_init_hooks_test_value'] !== true) $this->results['pre_init_hooks']['not_called_properly'] = $ret = false;
     else $this->results['pre_init_hooks']['not_called_properly'] = true;
 
-
     unset(Config::$settings['pre_functions']);
     return $ret;
   }
+  
   public function init(){return true;}
   public function register_inis(){return true;}
   public function register_classes(){return true;}
