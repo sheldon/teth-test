@@ -6,11 +6,14 @@ class BaseTest{
   public $total_tests = 0;
   public $tests_passed = 0;
   public $tests_failed = 0;
+  public $results=array();
+  public $excluded_functions = array("run_tests");
+
 
   public function run_tests() {
     if($this->class_path) include_once($this->class_path);
     if($this->class) $this->class = new $this->class;
-    foreach(array_diff(get_class_methods(get_class($this)),array("run_tests")) as $test){
+    foreach(array_diff(get_class_methods(get_class($this)),$this->excluded_functions) as $test){
       $test_class = get_class($this);
       $test_object = new $test_class;
       $this->output .= "  --> $test\n";
