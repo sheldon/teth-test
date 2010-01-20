@@ -66,7 +66,18 @@ class TestAutoloader extends BaseTest{
   }
   
   public function class_in_config(){
-    return true;    
+    $ret = true;
+    
+    unset(Config::$settings['classes']['foo_index']);
+    if(Autoloader::class_in_config('FooClass')) $this->results['class_in_config']['empty_config'] = $ret = false;
+    else $this->results['class_in_config']['empty_config'] = true;
+    
+    Config::$settings['classes']['foo_index'] = array('class'=>'FooClass');
+    if(Autoloader::class_in_config('FooClass') != "foo_index") $this->results['class_in_config']['not_found'] = $ret = false;
+    else $this->results['class_in_config']['not_found'];
+    
+    unset(Config::$settings['classes']['foo_index']);
+    return $ret;
   }
   public function pre_init_hooks(){return true;}
   public function init(){return true;}
