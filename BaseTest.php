@@ -11,7 +11,7 @@ class BaseTest{
 
 
   public function run_tests() {
-    if($this->class_path) include_once($this->class_path);
+    if($this->class_path) include_once(SITE_DIR.$this->class_path);
     if($this->class) $this->class = new $this->class;
     foreach(array_diff(get_class_methods(get_class($this)),$this->excluded_functions) as $test){
       $test_class = get_class($this);
