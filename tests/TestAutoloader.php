@@ -108,8 +108,47 @@ class TestAutoloader extends BaseTest{
     return $ret;
   }
   
-  public function init(){return true;}
-  public function register_inis(){return true;}
+  public function init(){
+    $ret = true;
+    Autoloader::init();
+    
+    //did autoloader register itself as loaded?
+    if(Autoloader::$loaded['Autoloader'] != Autoloader::path_to('autoloader')) $this->results['init']['autoloader_loaded'] = $ret = false;
+    else $this->results['init']['autoloader_loaded'] = true;
+    
+    $this->results['init']['register_inis'] = false;
+    $this->results['init']['pre_init_hooks'] = false;
+    $this->results['init']['register_classes'] = false;
+    
+    return $ret;
+  }
+  
+  public function register_inis(){
+    $ret = true;
+    
+    //check if it can load the iterator class correctly
+    $backup_iterator = Config::$settings['classes']['ini_directory_iterator'];
+    $backup_listings = Config::$settings['listings'];
+
+    Config::$settings['classes']['ini_directory_iterator'] = array(
+      'class'=>'TestAutoloaderIteratorDummyClass',
+      'base'=>SITE_DIR,
+      'component'=>'plugins',
+      'module'=>'teth-test',
+    );
+    Config::$settings['listings'] = array();
+    
+    Autoloader::register_inis();
+    
+    if(!class_exists('TestAutoloaderIteratorDummyClass', false)) $this->results['register_inis']['iterator_class_loads_correctly'] = $ret = false;
+    else $this->results['register_inis']['iterator_class_loads_correctly'] = true;
+    
+    Config::$settings['classes']['ini_directory_iterator'] = $backup_iterator;
+    Config::$settings['listings'] = $backup_listings;
+    
+    return $ret;
+  }
+  
   public function register_classes(){return true;}
   public function add_component(){return true;}
   public function remove_component(){return true;}
