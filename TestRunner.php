@@ -23,6 +23,7 @@ class TestRunner{
       Autoloader::init();
       echo "Running Autoloader::add_component()\n";      
       Autoloader::add_component(SITE_NAME, SITE_DIR);  
+      Autoloader::add_component(SITE_NAME, substr(SITE_DIR,0, strrpos(rtrim(SITE_DIR,"/"), "/")+1) ); 
       echo "Running Autoloader::register_classes()\n";      
       Autoloader::register_classes(array(SITE_DIR));
       $this->test_classes = $this->scan_classes(Autoloader::$classes);
