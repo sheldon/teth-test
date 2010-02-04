@@ -221,7 +221,7 @@ class TestAutoloader extends BaseTest{
   public function load(){
     $ret = true;
     //test that should work
-      //use the example class from the tests     
+      //use the example class from the tests
     Autoloader::$classes['TestExampleClass'] = realpath(dirname(__FILE__)."/../")."/TestExampleClass.php";
     $class = 'TestExampleClass';
       //load it!
@@ -239,10 +239,10 @@ class TestAutoloader extends BaseTest{
 
     Config::$settings['exceptions']['missing_class']['class'] = $original_class;
     unset(Autoloader::$classes['TestExampleClass']);
-    
+
     return $ret;
   }
-  
+
   public function fetch_controllers(){
     $ret = true;
     $original = Autoloader::$controllers;
@@ -258,9 +258,9 @@ class TestAutoloader extends BaseTest{
     $fetched = Autoloader::fetch_controllers();
     if(count($original) == count($fetched)) $this->results['fetch_controllers']['dummy_added'] = $ret = false;
     else $this->results['fetch_controllers']['dummy_added'] = true;
-    
+
     unset(Autoloader::$classes['DummyTestController']);
-    
+
     return true;
   }
   public function go(){return true;}
