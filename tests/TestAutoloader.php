@@ -218,7 +218,29 @@ class TestAutoloader extends BaseTest{
     return $ret;
   }
 
-  public function load(){return true;}
+  public function load(){
+    $ret = true;
+    //set the classes & exceptions to false so no error is thrown
+    $original_class = Config::$settings['exceptions']['missing_class']['class'];
+    Config::$settings['exceptions']['missing_class']['class'] = false;
+
+    //test that should work
+      //randomly pick a class
+    $class = array_rand(Autoloader::$classes);
+      //load it!
+    $returned = Autoloader::load($class);
+    if(!class_exists($class)) $this->results['load']['failed_to_load_existing_class'] = $ret = false;
+    else $this->results['load']['failed_to_load_existing_class'] = true;
+
+    //test load that shouldnt work
+    $random_class = 'RandomClass'.rand(1,10);
+    if(Autoloader::load($random_class)) $this->results['load']['realised_class_didnt_exist'] = $ret = false;
+    else $this->results['load']['realised_class_didnt_exist'] = true;
+
+    Config::$settings['exceptions']['missing_class']['class'] = $original_class;
+
+    return $ret;
+  }
   public function fetch_controllers(){return true;}
   public function go(){return true;}
   public function index(){return true;}
