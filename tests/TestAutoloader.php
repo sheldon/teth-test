@@ -185,7 +185,7 @@ class TestAutoloader extends BaseTest{
     $comp_dir = realpath(dirname(__FILE__)."/../../")."/";
 
     Autoloader::add_component($comp_name, $comp_dir);
-
+    
     if(!isset(Autoloader::$components[$comp_name])) $this->results['add_component']['added_to_array'] = $ret = false;
     else $this->results['add_component']['added_to_array'] = true;
 
@@ -199,12 +199,12 @@ class TestAutoloader extends BaseTest{
     else $this->results['add_component']['matching_path'] = true;
 
     Autoloader::$components = $original_comps;
-
+    
     return $ret;
   }
 
   public function remove_component(){
-
+    return true;
   }
 
   public function load(){return true;}
