@@ -1,4 +1,4 @@
 <?
-class TestModifiedRecursiveDirectoryIterator extends BaseTest{
+class TestTethRecursiveDirectoryIterator extends BaseTest{
   public function hasChildren(){}
 }?>
