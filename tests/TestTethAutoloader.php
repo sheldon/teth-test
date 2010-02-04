@@ -9,40 +9,40 @@ class TestAutoloader extends BaseTest{
     $ret=true;
     //wrong syntax usage
     unset(Config::$settings['classes']['foo_index']);
-    if(Autoloader::path_to('foo_index')) $this->results['path_to']['empty_class_config'] = $ret = false;
+    if(TethAutoloader::path_to('foo_index')) $this->results['path_to']['empty_class_config'] = $ret = false;
     else $this->results['path_to']['empty_class_config'] = true;
 
     Config::$settings['classes']['foo_index'] = array();
-    if(Autoloader::path_to('foo_index')) $this->results['path_to']['empty_array'] = $ret = false;
+    if(TethAutoloader::path_to('foo_index')) $this->results['path_to']['empty_array'] = $ret = false;
     else $this->results['path_to']['empty_array'] = true;
 
     Config::$settings['classes']['foo_index'] = "foo_wrong_syntax_to_config";
-    if(Autoloader::path_to('foo_index')) $this->results['path_to']['wrong_syntax'] = $ret = false;
+    if(TethAutoloader::path_to('foo_index')) $this->results['path_to']['wrong_syntax'] = $ret = false;
     else $this->results['path_to']['wrong_syntax'] = true;
 
     //normal syntax usage
     Config::$settings['classes']['foo_index'] = array('class'=>'FooClass');
-    if(Autoloader::path_to('foo_index') != FRAMEWORK_DIR."FooClass.php") $this->results['path_to']['foo_class'] = $ret = false;
+    if(TethAutoloader::path_to('foo_index') != FRAMEWORK_DIR."FooClass.php") $this->results['path_to']['foo_class'] = $ret = false;
     else $this->results['path_to']['foo_class'] = true;
 
     Config::$settings['classes']['foo_index'] = array('class'=>'FooClass', 'component'=>'FooComponent');
-    if(Autoloader::path_to('foo_index') != FRAMEWORK_DIR."FooComponent/FooClass.php") $this->results['path_to']['foo_class_foo_component'] = $ret = false;
+    if(TethAutoloader::path_to('foo_index') != FRAMEWORK_DIR."FooComponent/FooClass.php") $this->results['path_to']['foo_class_foo_component'] = $ret = false;
     else $this->results['path_to']['foo_class_foo_component'] = true;
 
     Config::$settings['classes']['foo_index'] = array('class'=>'FooClass', 'module'=>'FooModule');
-    if(Autoloader::path_to('foo_index') != FRAMEWORK_DIR."FooModule/FooClass.php") $this->results['path_to']['foo_class_foo_module'] = $ret = false;
+    if(TethAutoloader::path_to('foo_index') != FRAMEWORK_DIR."FooModule/FooClass.php") $this->results['path_to']['foo_class_foo_module'] = $ret = false;
     else $this->results['path_to']['foo_class_foo_module'] = true;
 
     Config::$settings['classes']['foo_index'] = array('class'=>'FooClass', 'component'=>'FooComponent', 'module'=>'FooModule');
-    if(Autoloader::path_to('foo_index') != FRAMEWORK_DIR."FooComponent/FooModule/FooClass.php") $this->results['path_to']['foo_class_foo_module_foo_component'] = $ret = false;
+    if(TethAutoloader::path_to('foo_index') != FRAMEWORK_DIR."FooComponent/FooModule/FooClass.php") $this->results['path_to']['foo_class_foo_module_foo_component'] = $ret = false;
     else $this->results['path_to']['foo_class_foo_component_foo_module'] = true;
 
     Config::$settings['classes']['foo_index'] = array('class'=>'FooClass', 'component'=>'FooComponent', 'module'=>'FooModule', 'suffix'=>'.test');
-    if(Autoloader::path_to('foo_index') != FRAMEWORK_DIR."FooComponent/FooModule/FooClass.test") $this->results['path_to']['foo_class_foo_module_foo_component_test_suffix'] = $ret = false;
+    if(TethAutoloader::path_to('foo_index') != FRAMEWORK_DIR."FooComponent/FooModule/FooClass.test") $this->results['path_to']['foo_class_foo_module_foo_component_test_suffix'] = $ret = false;
     else $this->results['path_to']['foo_class_foo_module_foo_component_test_suffix'] = true;
 
     Config::$settings['classes']['foo_index'] = array('class'=>'FooClass', 'component'=>'FooComponent', 'module'=>'FooModule', 'base'=>'/a/file/path/instead/of/a/constant/');
-    if(Autoloader::path_to('foo_index') != "/a/file/path/instead/of/a/constant/FooComponent/FooModule/FooClass.php") $this->results['path_to']['foo_class_foo_module_foo_component_test_full_path'] = $ret = false;
+    if(TethAutoloader::path_to('foo_index') != "/a/file/path/instead/of/a/constant/FooComponent/FooModule/FooClass.php") $this->results['path_to']['foo_class_foo_module_foo_component_test_full_path'] = $ret = false;
     else $this->results['path_to']['foo_class_foo_module_foo_component_test_full_path'] = true;
 
     unset(Config::$settings['classes']['foo_index']);
@@ -54,11 +54,11 @@ class TestAutoloader extends BaseTest{
     $ret = true;
 
     unset(Config::$settings['classes']['foo_index']);
-    if(Autoloader::class_for('foo_index') != null) $this->results['class_for']['empty_config'] = $ret = false;
+    if(TethAutoloader::class_for('foo_index') != null) $this->results['class_for']['empty_config'] = $ret = false;
     else $this->results['class_for']['empty_config'] = true;
 
     Config::$settings['classes']['foo_index'] = array('class'=>'FooClass');
-    if(Autoloader::class_for('foo_index') != "FooClass") $this->results['class_for']['foo_class'] = $ret = false;
+    if(TethAutoloader::class_for('foo_index') != "FooClass") $this->results['class_for']['foo_class'] = $ret = false;
     else $this->results['class_for']['foo_class'] = true;
 
     unset(Config::$settings['classes']['foo_index']);
@@ -70,11 +70,11 @@ class TestAutoloader extends BaseTest{
     $ret = true;
 
     unset(Config::$settings['classes']['foo_index']);
-    if(Autoloader::class_in_config('FooClass')) $this->results['class_in_config']['empty_config'] = $ret = false;
+    if(TethAutoloader::class_in_config('FooClass')) $this->results['class_in_config']['empty_config'] = $ret = false;
     else $this->results['class_in_config']['empty_config'] = true;
 
     Config::$settings['classes']['foo_index'] = array('class'=>'FooClass');
-    if(Autoloader::class_in_config('FooClass') != "foo_index") $this->results['class_in_config']['not_found'] = $ret = false;
+    if(TethAutoloader::class_in_config('FooClass') != "foo_index") $this->results['class_in_config']['not_found'] = $ret = false;
     else $this->results['class_in_config']['not_found'];
 
     unset(Config::$settings['classes']['foo_index']);
@@ -89,18 +89,18 @@ class TestAutoloader extends BaseTest{
     $GLOBALS['pre_init_hooks_test_value'] = false;
     $ret = true;
     unset(Config::$settings['pre_functions']);
-    Autoloader::pre_init_hooks();
+    TethAutoloader::pre_init_hooks();
     if($GLOBALS['pre_init_hooks_test_value'] !== false) $this->results['pre_init_hooks']['empty_config'] = $ret = false;
     else $this->results['pre_init_hooks']['empty_config'] = true;
 
     Config::$settings['pre_functions'] = array('file/that/doesnt/exists'=>array('TestAutoloader'=>array('pre_init_hook_test')));
-    Autoloader::pre_init_hooks();
+    TethAutoloader::pre_init_hooks();
     if($GLOBALS['pre_init_hooks_test_value'] !== false) $this->results['pre_init_hooks']['incorrect_file_path'] = $ret = false;
     else $this->results['pre_init_hooks']['incorrect_file_path'] = true;
 
     $path = __FILE__;
     Config::$settings['pre_functions'] = array($path=>array('TestAutoloader'=>array('pre_init_hook_test')));
-    Autoloader::pre_init_hooks();
+    TethAutoloader::pre_init_hooks();
     if($GLOBALS['pre_init_hooks_test_value'] !== true) $this->results['pre_init_hooks']['not_called_properly'] = $ret = false;
     else $this->results['pre_init_hooks']['not_called_properly'] = true;
 
@@ -110,10 +110,10 @@ class TestAutoloader extends BaseTest{
 
   public function init(){
     $ret = true;
-    Autoloader::init();
+    TethAutoloader::init();
 
     //did autoloader register itself as loaded?
-    if(Autoloader::$loaded['Autoloader'] != Autoloader::path_to('autoloader')) $this->results['init']['autoloader_loaded'] = $ret = false;
+    if(TethAutoloader::$loaded['Autoloader'] != TethAutoloader::path_to('autoloader')) $this->results['init']['autoloader_loaded'] = $ret = false;
     else $this->results['init']['autoloader_loaded'] = true;
 
     $this->results['init']['register_inis'] = false;
@@ -138,7 +138,7 @@ class TestAutoloader extends BaseTest{
     );
     Config::$settings['listings'] = array();
 
-    Autoloader::register_inis();
+    TethAutoloader::register_inis();
 
     if(!class_exists('TestAutoloaderIteratorDummyClass', false)) $this->results['register_inis']['iterator_class_loads_correctly'] = $ret = false;
     else $this->results['register_inis']['iterator_class_loads_correctly'] = true;
@@ -152,25 +152,25 @@ class TestAutoloader extends BaseTest{
   public function register_classes(){
     $ret = true;
     //copy over the current settings
-    $original_classes = Autoloader::$classes;
-    $original_comps = Autoloader::$components;
+    $original_classes = TethAutoloader::$classes;
+    $original_comps = TethAutoloader::$components;
     //wipe them ready for testing
-    Autoloader::$classes = Autoloader::$components = array();
+    TethAutoloader::$classes = TethAutoloader::$components = array();
     $dir = array('testing_register_classes'=>dirname(__FILE__));
     //register all the test classes directory
-    Autoloader::register_classes($dir);
+    TethAutoloader::register_classes($dir);
     $class = get_class($this);
     $class_path = __FILE__;
 
-    if(!isset(Autoloader::$classes[$class])) $this->results['register_classes']['added_to_array'] = $ret = false;
+    if(!isset(TethAutoloader::$classes[$class])) $this->results['register_classes']['added_to_array'] = $ret = false;
     else $this->results['register_classes']['added_to_array'] = true;
     //as long as the class path matches then its all ok!
-    if(Autoloader::$classes[$class] != $class_path) $this->results['register_classes']['correct_path'] = $ret = false;
+    if(TethAutoloader::$classes[$class] != $class_path) $this->results['register_classes']['correct_path'] = $ret = false;
     else $this->results['register_classes']['correct_path'] = true;
 
     //reset these back to originals so not to pollute other tests
-    Autoloader::$classes = $original_classes;
-    Autoloader::$components = $original_comps;
+    TethAutoloader::$classes = $original_classes;
+    TethAutoloader::$components = $original_comps;
 
     return $ret;
   }
@@ -178,27 +178,27 @@ class TestAutoloader extends BaseTest{
   public function add_component(){
     $ret = true;
 
-    $original_comps = Autoloader::$components;
-    Autoloader::$components = array();
+    $original_comps = TethAutoloader::$components;
+    TethAutoloader::$components = array();
     //the setup for teth tests...
     $comp_name = 'teth-test';
     $comp_dir = realpath(dirname(__FILE__)."/../../")."/";
 
-    Autoloader::add_component($comp_name, $comp_dir);
+    TethAutoloader::add_component($comp_name, $comp_dir);
 
-    if(!isset(Autoloader::$components[$comp_name])) $this->results['add_component']['added_to_array'] = $ret = false;
+    if(!isset(TethAutoloader::$components[$comp_name])) $this->results['add_component']['added_to_array'] = $ret = false;
     else $this->results['add_component']['added_to_array'] = true;
 
-    if(!is_dir(Autoloader::$components[$comp_name])) $this->results['add_component']['is_dir'] = $ret = false;
+    if(!is_dir(TethAutoloader::$components[$comp_name])) $this->results['add_component']['is_dir'] = $ret = false;
     else $this->results['add_component']['is_dir'] = true;
 
-    if(!is_readable(Autoloader::$components[$comp_name])) $this->results['add_component']['is_readable'] = $ret = false;
+    if(!is_readable(TethAutoloader::$components[$comp_name])) $this->results['add_component']['is_readable'] = $ret = false;
     else $this->results['add_component']['is_readable'] = true;
 
-    if(Autoloader::$components[$comp_name] != ($comp_dir.$comp_name)) $this->results['add_component']['matching_path'] = $ret = false;
+    if(TethAutoloader::$components[$comp_name] != ($comp_dir.$comp_name)) $this->results['add_component']['matching_path'] = $ret = false;
     else $this->results['add_component']['matching_path'] = true;
 
-    Autoloader::$components = $original_comps;
+    TethAutoloader::$components = $original_comps;
 
     return $ret;
   }
@@ -206,14 +206,14 @@ class TestAutoloader extends BaseTest{
   public function remove_component(){
     $ret = true;
 
-    $original_comps = Autoloader::$components;
+    $original_comps = TethAutoloader::$components;
     $comp_name = 'core';
-    Autoloader::remove_component('core');
+    TethAutoloader::remove_component('core');
 
-    if(isset(Autoloader::$components[$comp_name])) $this->results['remove_component']['removed'] = $ret = false;
+    if(isset(TethAutoloader::$components[$comp_name])) $this->results['remove_component']['removed'] = $ret = false;
     else $this->results['remove_component']['removed'] = true;
 
-    Autoloader::$components = $original_comps;
+    TethAutoloader::$components = $original_comps;
 
     return $ret;
   }
@@ -222,10 +222,10 @@ class TestAutoloader extends BaseTest{
     $ret = true;
     //test that should work
       //use the example class from the tests
-    Autoloader::$classes['TestExampleClass'] = realpath(dirname(__FILE__)."/../")."/TestExampleClass.php";
+    TethAutoloader::$classes['TestExampleClass'] = realpath(dirname(__FILE__)."/../")."/TestExampleClass.php";
     $class = 'TestExampleClass';
       //load it!
-    $returned = Autoloader::load($class);
+    $returned = TethAutoloader::load($class);
     if(!class_exists($class)) $this->results['load']['failed_to_load_existing_class'] = $ret = false;
     else $this->results['load']['failed_to_load_existing_class'] = true;
 
@@ -234,19 +234,19 @@ class TestAutoloader extends BaseTest{
     Config::$settings['exceptions']['missing_class']['class'] = false;
     //test load that shouldnt work
     $random_class = 'RandomClass'.rand(1,10);
-    if(Autoloader::load($random_class)) $this->results['load']['class_doesnt_exist'] = $ret = false;
+    if(TethAutoloader::load($random_class)) $this->results['load']['class_doesnt_exist'] = $ret = false;
     else $this->results['load']['class_doesnt_exist'] = true;
 
     Config::$settings['exceptions']['missing_class']['class'] = $original_class;
-    unset(Autoloader::$classes['TestExampleClass']);
+    unset(TethAutoloader::$classes['TestExampleClass']);
 
     return $ret;
   }
 
   public function fetch_controllers(){
     $ret = true;
-    $original = Autoloader::$controllers;
-    $fetched = Autoloader::fetch_controllers();
+    $original = TethAutoloader::$controllers;
+    $fetched = TethAutoloader::fetch_controllers();
     //there should be none!
     if(count($fetched)) $this->results['fetch_controllers']['empty_at_start'] = $ret = false;
     else $this->results['fetch_controllers']['empty_at_start'] = true;
@@ -254,12 +254,12 @@ class TestAutoloader extends BaseTest{
     if(count($original) != count($fetched)) $this->results['fetch_controllers']['raw_match_fetched'] = $ret = false;
     else $this->results['fetch_controllers']['raw_match_fetched'] = true;
     //add a dummy controller
-    Autoloader::$classes['DummyTestController'] = CONTROLLER_DIR .'/DummyTestController.php';
-    $fetched = Autoloader::fetch_controllers();
+    TethAutoloader::$classes['DummyTestController'] = CONTROLLER_DIR .'/DummyTestController.php';
+    $fetched = TethAutoloader::fetch_controllers();
     if(count($original) == count($fetched)) $this->results['fetch_controllers']['dummy_added'] = $ret = false;
     else $this->results['fetch_controllers']['dummy_added'] = true;
 
-    unset(Autoloader::$classes['DummyTestController']);
+    unset(TethAutoloader::$classes['DummyTestController']);
 
     return true;
   }
@@ -271,14 +271,14 @@ class TestAutoloader extends BaseTest{
 
     $dir = realpath(dirname(__FILE__)."/../../");
     Config::$settings['classes']['application'] = array('class'=>'TestExampleClass', 'component'=>false, 'module'=>'teth-test', 'base'=>$dir);
-    Autoloader::$classes['TestExampleClass'] = $dir."/teth-test/TestExampleClass.php";
-    Autoloader::go();
+    TethAutoloader::$classes['TestExampleClass'] = $dir."/teth-test/TestExampleClass.php";
+    TethAutoloader::go();
 
     if(!$GLOBALS['application_has_run']) $this->results['go']['run'] = $ret = false;
     else $this->results['go']['run'] = true;
 
     Config::$settings['classes']['application'] = $application;
-    unset(Autoloader::$classes['TestExampleClass']);
+    unset(TethAutoloader::$classes['TestExampleClass']);
     return $ret;
   }
 
