@@ -264,8 +264,6 @@ class TestAutoloader extends BaseTest{
     return true;
   }
   public function go(){return true;}
-  public function index(){return true;}
-
 
 
   public function pre_init_hook_test(){
