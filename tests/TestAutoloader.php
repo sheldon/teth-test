@@ -149,7 +149,28 @@ class TestAutoloader extends BaseTest{
     return $ret;
   }
   
-  public function register_classes(){return true;}
+  public function register_classes(){
+    $ret = true;
+    //copy over the current settings
+    $original_classes = Autoloader::$classes;
+    $original_comps = Autoloader::$components;
+    //wipe them ready for testing
+    Autoloader::$classes = Autoloader::$components = array();
+    $dir = array('testing_register_classes'=>dirname(__FILE__));
+    //register all the test classes directory
+    Autoloader::register_classes($dir);
+    $class = get_class($this);
+    $class_path = __FILE__;
+    //as long as the class path matches then its all ok!
+    if(Autoloader::$classes[$class] != $class_path) $this->results['register_classes']['correct_path'] = $ret = false;
+    else $this->results['register_classes']['correct_path'] = true;
+
+    //reset these back to originals so not to pollute other tests
+    Autoloader::$classes = $original_classes;
+    Autoloader::$components = $original_comps;
+
+    return $ret;
+  }
   public function add_component(){return true;}
   public function remove_component(){return true;}
   public function load(){return true;}
