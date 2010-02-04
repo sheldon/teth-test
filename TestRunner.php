@@ -36,7 +36,13 @@ class TestRunner{
     //stolen from index.php in our skel :)
     define("SITE_DIR", realpath(dirname(__FILE__)."/../../")."/");
     $path = pathinfo(SITE_DIR);
-    define("SITE_NAME", $path['basename']);
+    /**
+     * for testing purposes wont be defining SITE_NAME; instead call it TEST_PLUGIN_NAME -
+     * this is because SITE_NAME triggers things inside Autoloader we dont want!
+     * define("SITE_NAME", $path['basename']);
+     */
+    define("TEST_PLUGIN_NAME",$path['basename']);
+
     define("FRAMEWORK_NAME", "teth");
 
     if(!defined("FRAMEWORK_DIR")) define("FRAMEWORK_DIR", SITE_DIR.FRAMEWORK_NAME."/");
