@@ -242,7 +242,27 @@ class TestAutoloader extends BaseTest{
     
     return $ret;
   }
-  public function fetch_controllers(){return true;}
+  
+  public function fetch_controllers(){
+    $ret = true;
+    $original = Autoloader::$controllers;
+    $fetched = Autoloader::fetch_controllers();
+    //there should be none!
+    if(count($fetched)) $this->results['fetch_controllers']['empty_at_start'] = $ret = false;
+    else $this->results['fetch_controllers']['empty_at_start'] = true;
+    //they should match exactly!
+    if(count($original) != count($fetched)) $this->results['fetch_controllers']['raw_match_fetched'] = $ret = false;
+    else $this->results['fetch_controllers']['raw_match_fetched'] = true;
+    //add a dummy controller
+    Autoloader::$classes['DummyTestController'] = CONTROLLER_DIR .'/DummyTestController.php';
+    $fetched = Autoloader::fetch_controllers();
+    if(count($original) == count($fetched)) $this->results['fetch_controllers']['dummy_added'] = $ret = false;
+    else $this->results['fetch_controllers']['dummy_added'] = true;
+    
+    unset(Autoloader::$classes['DummyTestController']);
+    
+    return true;
+  }
   public function go(){return true;}
   public function index(){return true;}
 
