@@ -107,25 +107,25 @@ class TestAutoloader extends BaseTest{
     unset(Config::$settings['pre_functions']);
     return $ret;
   }
-  
+
   public function init(){
     $ret = true;
     Autoloader::init();
-    
+
     //did autoloader register itself as loaded?
     if(Autoloader::$loaded['Autoloader'] != Autoloader::path_to('autoloader')) $this->results['init']['autoloader_loaded'] = $ret = false;
     else $this->results['init']['autoloader_loaded'] = true;
-    
+
     $this->results['init']['register_inis'] = false;
     $this->results['init']['pre_init_hooks'] = false;
     $this->results['init']['register_classes'] = false;
-    
+
     return $ret;
   }
-  
+
   public function register_inis(){
     $ret = true;
-    
+
     //check if it can load the iterator class correctly
     $backup_iterator = Config::$settings['classes']['ini_directory_iterator'];
     $backup_listings = Config::$settings['listings'];
@@ -137,18 +137,18 @@ class TestAutoloader extends BaseTest{
       'module'=>'teth-test',
     );
     Config::$settings['listings'] = array();
-    
+
     Autoloader::register_inis();
-    
+
     if(!class_exists('TestAutoloaderIteratorDummyClass', false)) $this->results['register_inis']['iterator_class_loads_correctly'] = $ret = false;
     else $this->results['register_inis']['iterator_class_loads_correctly'] = true;
-    
+
     Config::$settings['classes']['ini_directory_iterator'] = $backup_iterator;
     Config::$settings['listings'] = $backup_listings;
-    
+
     return $ret;
   }
-  
+
   public function register_classes(){
     $ret = true;
     //copy over the current settings
@@ -171,8 +171,37 @@ class TestAutoloader extends BaseTest{
 
     return $ret;
   }
-  public function add_component(){return true;}
-  public function remove_component(){return true;}
+
+  public function add_component(){
+    $ret = true;
+
+    $original_comps = Autoloader::$components;
+    Autoloader::$components = array();
+    //the setup for teth tests...
+    $comp_name = 'teth-test';
+    $comp_dir = realpath(dirname(__FILE__)."/../../")."/";
+
+    Autoloader::add_component($comp_name, $comp_dir);
+
+    if(!Autoloader::$components[$comp_name]) $this->results['add_component']['added_to_array'] = $ret = false;
+    else $this->results['add_component']['added_to_array'] = true;
+
+    if(!is_dir(Autoloader::$components[$comp_name])) $this->results['add_component']['is_dir'] = $ret = false;
+    else $this->results['add_component']['is_dir'] = true;
+
+    if(!is_readable(Autoloader::$components[$comp_name])) $this->results['add_component']['is_readable'] = $ret = false;
+    else $this->results['add_component']['is_readable'] = true;
+
+    if(Autoloader::$components[$comp_name] != ($comp_dir.$comp_name)) $this->results['add_component']['matching_path'] = $ret = false;
+    else $this->results['add_component']['matching_path'] = true;
+
+    return $ret;
+  }
+
+  public function remove_component(){
+
+  }
+
   public function load(){return true;}
   public function fetch_controllers(){return true;}
   public function go(){return true;}
