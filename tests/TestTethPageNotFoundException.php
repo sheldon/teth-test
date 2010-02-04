@@ -1,4 +1,4 @@
 <?
-class TestPageNotFoundException extends BaseTest{
+class TestTethPageNotFoundException extends BaseTest{
   public function construct() {}
 }?>
