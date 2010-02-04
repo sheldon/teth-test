@@ -1,5 +1,5 @@
 <?
-class TestCoreController extends BaseTest{
+class TestTethCoreController extends BaseTest{
   public function construct(){}
   public function before(){}
   public function after(){}

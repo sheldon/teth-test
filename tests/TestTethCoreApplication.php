@@ -1,5 +1,5 @@
 <?php
-class TestCoreApplication extends BaseTest{
+class TestTethCoreApplication extends BaseTest{
   public function construct(){}
   public function environment(){}
   public function setup(){}

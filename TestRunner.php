@@ -2,7 +2,7 @@
 
 <?php
 class TestRunner{
-  public $bootstrap_paths = array("BaseTest.php","tests/TestAutoloader.php");
+  public $bootstrap_paths = array("BaseTest.php","tests/TestTethAutoloader.php");
   public $scan_folders = array();
   public $test_classes = array();
   public $failed = 0;
@@ -59,7 +59,7 @@ class TestRunner{
 
   public function bootstrap_test_autoloader(){
     foreach($this->bootstrap_paths as $path) include_once($path);
-    $test_autoloader = new TestAutoloader();
+    $test_autoloader = new TestTethAutoloader();
     return $test_autoloader->run_tests();
   }
 

@@ -1,7 +1,7 @@
 <?php
-class TestAutoloader extends BaseTest{
-  public $class = "AutoLoader";
-  public $class_path = "teth/Autoloader.php";
+class TestTethAutoloader extends BaseTest{
+  public $class = "TethAutoLoader";
+  public $class_path = "teth/TethAutoloader.php";
   public $excluded_functions = array("run_tests", "pre_init_hook_test");
 
 
@@ -93,13 +93,13 @@ class TestAutoloader extends BaseTest{
     if($GLOBALS['pre_init_hooks_test_value'] !== false) $this->results['pre_init_hooks']['empty_config'] = $ret = false;
     else $this->results['pre_init_hooks']['empty_config'] = true;
 
-    Config::$settings['pre_functions'] = array('file/that/doesnt/exists'=>array('TestAutoloader'=>array('pre_init_hook_test')));
+    Config::$settings['pre_functions'] = array('file/that/doesnt/exists'=>array('TestTethAutoloader'=>array('pre_init_hook_test')));
     TethAutoloader::pre_init_hooks();
     if($GLOBALS['pre_init_hooks_test_value'] !== false) $this->results['pre_init_hooks']['incorrect_file_path'] = $ret = false;
     else $this->results['pre_init_hooks']['incorrect_file_path'] = true;
 
     $path = __FILE__;
-    Config::$settings['pre_functions'] = array($path=>array('TestAutoloader'=>array('pre_init_hook_test')));
+    Config::$settings['pre_functions'] = array($path=>array('TestTethAutoloader'=>array('pre_init_hook_test')));
     TethAutoloader::pre_init_hooks();
     if($GLOBALS['pre_init_hooks_test_value'] !== true) $this->results['pre_init_hooks']['not_called_properly'] = $ret = false;
     else $this->results['pre_init_hooks']['not_called_properly'] = true;
