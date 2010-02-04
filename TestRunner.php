@@ -19,14 +19,14 @@ class TestRunner{
         echo $bootstrap_test->output;
         exit;
       }else echo "Bootstrap Pass, continuing...\n";
-      echo "Running Autoloader::init()\n";
-      Autoloader::init();
-      echo "Running Autoloader::add_component()\n";
-      Autoloader::add_component(TEST_PLUGIN_NAME, SITE_DIR);
-      Autoloader::add_component(TEST_PLUGIN_NAME, substr(SITE_DIR,0, strrpos(rtrim(SITE_DIR,"/"), "/")+1) );
-      echo "Running Autoloader::register_classes()\n";
-      Autoloader::register_classes(array(SITE_DIR));
-      $this->test_classes = $this->scan_classes(Autoloader::$classes);
+      echo "Running TethAutoloader::init()\n";
+      TethAutoloader::init();
+      echo "Running TethAutoloader::add_component()\n";
+      TethAutoloader::add_component(TEST_PLUGIN_NAME, SITE_DIR);
+      TethAutoloader::add_component(TEST_PLUGIN_NAME, substr(SITE_DIR,0, strrpos(rtrim(SITE_DIR,"/"), "/")+1) );
+      echo "Running TethAutoloader::register_classes()\n";
+      TethAutoloader::register_classes(array(SITE_DIR));
+      $this->test_classes = $this->scan_classes(TethAutoloader::$classes);
       echo "Found ".count($this->test_classes)." test classes ...\n";
       $this->run_tests();
     }
