@@ -21,17 +21,17 @@ class TestRunner{
       }else echo "Bootstrap Pass, continuing...\n";
       echo "Running Autoloader::init()\n";
       Autoloader::init();
-      echo "Running Autoloader::add_component()\n";      
-      Autoloader::add_component(SITE_NAME, SITE_DIR);  
-      Autoloader::add_component(SITE_NAME, substr(SITE_DIR,0, strrpos(rtrim(SITE_DIR,"/"), "/")+1) ); 
-      echo "Running Autoloader::register_classes()\n";      
+      echo "Running Autoloader::add_component()\n";
+      Autoloader::add_component(TEST_PLUGIN_NAME, SITE_DIR);
+      Autoloader::add_component(TEST_PLUGIN_NAME, substr(SITE_DIR,0, strrpos(rtrim(SITE_DIR,"/"), "/")+1) );
+      echo "Running Autoloader::register_classes()\n";
       Autoloader::register_classes(array(SITE_DIR));
       $this->test_classes = $this->scan_classes(Autoloader::$classes);
       echo "Found ".count($this->test_classes)." test classes ...\n";
       $this->run_tests();
     }
   }
-  
+
   public function init_constants(){
     //stolen from index.php in our skel :)
     define("SITE_DIR", realpath(dirname(__FILE__)."/../../")."/");
@@ -50,19 +50,19 @@ class TestRunner{
       else date_default_timezone_set(PHP_TIMEZONE);
     }
   }
-  
+
   public function bootstrap_test_autoloader(){
     foreach($this->bootstrap_paths as $path) include_once($path);
     $test_autoloader = new TestAutoloader();
     return $test_autoloader->run_tests();
   }
-  
+
   public function scan_classes($all_classes){
     $test_classes = array();
     foreach((array)$all_classes as $class=>$path) if(is_subclass_of($class, "BaseTest")) $test_classes[] = $class;
     return $test_classes;
   }
-  
+
   public function run_tests(){
     $start_time = time();
     echo "==== STARTING ====\n";
