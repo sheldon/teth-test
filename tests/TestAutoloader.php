@@ -161,6 +161,9 @@ class TestAutoloader extends BaseTest{
     Autoloader::register_classes($dir);
     $class = get_class($this);
     $class_path = __FILE__;
+    
+    if(!isset(Autoloader::$classes[$class])) $this->results['register_classes']['added_to_array'] = $ret = false;
+    else $this->results['register_classes']['added_to_array'] = true;
     //as long as the class path matches then its all ok!
     if(Autoloader::$classes[$class] != $class_path) $this->results['register_classes']['correct_path'] = $ret = false;
     else $this->results['register_classes']['correct_path'] = true;
