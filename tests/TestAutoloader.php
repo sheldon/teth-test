@@ -186,7 +186,7 @@ class TestAutoloader extends BaseTest{
 
     Autoloader::add_component($comp_name, $comp_dir);
 
-    if(!Autoloader::$components[$comp_name]) $this->results['add_component']['added_to_array'] = $ret = false;
+    if(!isset(Autoloader::$components[$comp_name])) $this->results['add_component']['added_to_array'] = $ret = false;
     else $this->results['add_component']['added_to_array'] = true;
 
     if(!is_dir(Autoloader::$components[$comp_name])) $this->results['add_component']['is_dir'] = $ret = false;
