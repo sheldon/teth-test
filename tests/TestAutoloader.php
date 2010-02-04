@@ -263,7 +263,24 @@ class TestAutoloader extends BaseTest{
 
     return true;
   }
-  public function go(){return true;}
+
+  public function go(){
+    $ret=true;
+    $GLOBALS['application_has_run'] = false;
+    $application = Config::$settings['classes']['application'];
+
+    $dir = realpath(dirname(__FILE__)."/../../");
+    Config::$settings['classes']['application'] = array('class'=>'TestExampleClass', 'component'=>false, 'module'=>'teth-test', 'base'=>$dir);
+    Autoloader::$classes['TestExampleClass'] = $dir."/teth-test/TestExampleClass.php";
+    Autoloader::go();
+
+    if(!$GLOBALS['application_has_run']) $this->results['go']['run'] = $ret = false;
+    else $this->results['go']['run'] = true;
+
+    Config::$settings['classes']['application'] = $application;
+    unset(Autoloader::$classes['TestExampleClass']);
+    return $ret;
+  }
 
 
   public function pre_init_hook_test(){
