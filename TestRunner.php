@@ -33,7 +33,10 @@ class TestRunner{
   }
 
   public function init_constants(){
-   TethAutoloader::constants();
+    //stolen from index.php in our skel :)
+    define("SITE_DIR", realpath(dirname(__FILE__)."/../../")."/");
+    require SITE_DIR.'/teth/TethAutoloader.php';
+    TethAutoloader::constants();
   }
 
   public function bootstrap_test_autoloader(){
