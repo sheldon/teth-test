@@ -33,28 +33,7 @@ class TestRunner{
   }
 
   public function init_constants(){
-    //stolen from index.php in our skel :)
-    define("SITE_DIR", realpath(dirname(__FILE__)."/../../")."/");
-    $path = pathinfo(SITE_DIR);
-    /**
-     * for testing purposes wont be defining SITE_NAME; instead call it TEST_PLUGIN_NAME -
-     * this is because SITE_NAME triggers things inside Autoloader we dont want!
-     * define("SITE_NAME", $path['basename']);
-     */
-    define("TEST_PLUGIN_NAME",$path['basename']);
-
-    define("FRAMEWORK_NAME", "teth");
-
-    if(!defined("FRAMEWORK_DIR")) define("FRAMEWORK_DIR", SITE_DIR.FRAMEWORK_NAME."/");
-    if(!defined("APP_DIR")) define('APP_DIR', SITE_DIR . "app/");
-    if(!defined("CONTROLLER_DIR")) define('CONTROLLER_DIR', APP_DIR.'controller/');
-    if(!defined("CONFIG_DIR")) define('CONFIG_DIR' , APP_DIR.'config/');
-    if(!defined("PUBLIC_DIR")) define('PUBLIC_DIR' , SITE_DIR.'public/');
-
-    if(function_exists('date_default_timezone_set')){
-      if(!defined('PHP_TIMEZONE')) date_default_timezone_set('Europe/London');
-      else date_default_timezone_set(PHP_TIMEZONE);
-    }
+   TethAutoloader::constants();
   }
 
   public function bootstrap_test_autoloader(){
