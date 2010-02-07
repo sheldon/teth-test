@@ -268,6 +268,7 @@ class TestTethAutoloader extends BaseTest{
     $ret=true;
     $GLOBALS['application_has_run'] = false;
     $application = Config::$settings['classes']['application'];
+    $backup_components = TethAutoloader::$components;
 
     $dir = realpath(dirname(__FILE__)."/../../");
     Config::$settings['classes']['application'] = array('class'=>'TestExampleClass', 'component'=>false, 'module'=>'teth-test', 'base'=>$dir);
@@ -279,6 +280,7 @@ class TestTethAutoloader extends BaseTest{
 
     Config::$settings['classes']['application'] = $application;
     unset(TethAutoloader::$classes['TestExampleClass']);
+    TethAutoloader::$components = $backup_components;
     return $ret;
   }
 
