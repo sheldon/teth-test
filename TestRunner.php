@@ -32,8 +32,7 @@ class TestRunner{
   public function init_constants(){
     //stolen from index.php in our skel :)
     define("SITE_DIR", realpath(dirname(__FILE__)."/../../")."/");
-    require SITE_DIR.'/teth/TethAutoloader.php';
-    TethAutoloader::constants();
+    require SITE_DIR.'teth/TethAutoloader.php';
   }
 
   public function bootstrap_test_autoloader(){
